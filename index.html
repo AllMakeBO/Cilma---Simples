@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Clima para Uberaba</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 30px; background: #f0f8ff; }
+    #resultado { margin-top: 20px; font-size: 18px; white-space: pre-line; }
+    button { padding: 10px 15px; font-size: 16px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Clima atual</h1>
+  <button onclick="buscarClima()">Buscar clima em Uberaba</button>
+  <div id="resultado"></div>
+
+  <script>
+    async function buscarClima() {
+      const apiKey = '69f8a9f966532bc9d7905c5e87fbd1b0';
+      const cidade = 'Uberaba,BR';
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${cidade}&appid=${apiKey}&units=metric&lang=pt`;
+
+      try {
+        const resposta = await fetch(url);
+        if (!resposta.ok) {
+          throw new Error('Erro na requisição: ' + resposta.status);
+        }
+        const dados = await resposta.json();
+
+        const temp = dados.main.temp;
+        const umidade = dados.main.humidity;
+        const descricao = dados.weather[0].description;
+        const nomeCidade = dados.name;
+
+        // Use innerHTML ou style white-space para quebrar linha corretamente
+        document.getElementById('resultado').innerText = 
+          `Cidade: ${nomeCidade}\nTemperatura: ${temp}°C\nUmidade: ${umidade}%\nCondição: ${descricao}`;
+      } catch (erro) {
+        console.error(erro);
+        document.getElementById('resultado').innerText = 'Não foi possível obter o clima.';
+      }
+    }
+  </script>
+</body>
+</html>
